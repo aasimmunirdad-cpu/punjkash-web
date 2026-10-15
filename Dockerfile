@@ -14,6 +14,6 @@ COPY --from=build /app/public ./public
 COPY --from=build /app/drizzle ./drizzle
 COPY --from=build /app/node_modules/drizzle-orm ./node_modules/drizzle-orm
 COPY --from=build /app/node_modules/postgres ./node_modules/postgres
-COPY migrate.mjs ./
+COPY migrate.mjs seed.cjs ./
 EXPOSE 3000
 CMD ["sh", "-c", "node migrate.mjs && node server.js"]

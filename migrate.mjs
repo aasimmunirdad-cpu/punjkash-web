@@ -5,5 +5,11 @@ const url = process.env.DATABASE_URL;
 if (!url) { console.log("no DATABASE_URL, skipping migrations"); process.exit(0); }
 const sql = postgres(url, { max: 1 });
 await migrate(drizzle(sql), { migrationsFolder: "./drizzle" });
-await sql.end();
 console.log("migrations applied");
+const [{ n }] = await sql`select count(*)::int as n from packages`;
+await sql.end();
+if (n === 0 && process.env.SEED_ON_EMPTY !== "false") {
+  console.log("packages table empty, seeding register");
+  const { execSync } = await import("node:child_process");
+  execSync("node seed.cjs", { stdio: "inherit" });
+}
