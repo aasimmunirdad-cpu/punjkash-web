@@ -1,0 +1,5 @@
+import ServicePage from "@/components/ServicePage";
+export const metadata = { title: "Flights from Pakistan, all airlines", description: "Air tickets from Lahore, Islamabad, Karachi and Multan on Saudia, Emirates, Qatar, Turkish, PIA, Airblue and Air Sial. Group fares and bumper offers. Quote on WhatsApp." };
+export default function Page() {
+  return <ServicePage title="Flights, every airline, quoted the same day" intro="Economy to business on Saudia, Emirates, Qatar Airways, Turkish, Etihad, PIA, Airblue, Air Sial and FlyJinnah, including group fares and bumper offers that never reach the public booking sites." status="Live fare search is on its way. Until then, send your route and dates and we reply with options and a written price." points={["International and domestic, one-way and return", "Group bookings for families and corporate travel", "Umrah and Hajj flights tied to hotel bookings", "Changes, refunds and date flexibility explained before you pay"]} waText="Assalam o Alaikum, I need a flight quote. Route: __ Dates: __ Travellers: __" />;
+}

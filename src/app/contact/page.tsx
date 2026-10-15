@@ -1,0 +1,6 @@
+import { site, waLink } from "@/lib/site";
+import LeadForm from "@/components/LeadForm";
+export const metadata = { title: "Contact PunjKash, Lahore", description: "Call or WhatsApp Dr Aasim Munir Dad 0300 9395444 or Ghulam Mustafa 0324 4948850. Office: 12 Commercial, Sector G, DHA Phase 1, Lahore." };
+export default function Page() {
+  return <div className="wrap grid g2" style={{ padding: "48px 0" }}><div style={{ display: "flex", flexDirection: "column", gap: 18 }}><h1 style={{ fontSize: "clamp(30px,4vw,44px)" }}>Talk to a partner, not a call centre</h1>{site.partners.map((p) => <div key={p.wa} className="card"><h3>{p.name}</h3><span className="muted">{p.role}</span><div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}><a className="btn btn-wa btn-sm" href={waLink("Assalam o Alaikum", site.partners.indexOf(p))}>WhatsApp {p.phone}</a><a className="btn btn-line btn-sm" href={`tel:+${p.wa}`}>Call</a></div></div>)}<div className="card"><h3>Office</h3><span className="muted">{site.address}</span><a href={`mailto:${site.email}`}>{site.email}</a><span className="faint" style={{ fontSize: 14 }}>Visits by appointment. WhatsApp any time; calls 11:00 to 23:00.</span></div></div><div className="card" style={{ alignSelf: "start" }}><h3>Send an enquiry</h3><LeadForm pagePath="/contact" /></div></div>;
+}
