@@ -25,7 +25,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <header className="site">
           <div className="wrap row">
-            <Link href="/" aria-label="PunjKash home"><img src="/logo-navy.png" alt="PunjKash" style={{ height: 40, width: "auto" }} /></Link>
+            <Link href="/" aria-label="PunjKash home"><img className="brand-logo" src="/logo-navy.png" alt="PunjKash" /></Link>
             <nav>{site.nav.map((n) => <Link key={n.href} href={n.href}>{n.label}</Link>)}</nav>
             <div className="right">
               <a className="phone" href={`tel:+${site.partners[0].wa}`}>{site.partners[0].phone}</a>
@@ -35,7 +35,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </div>
         </header>
         <div id="menu" className="menu-panel">
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "4px 0 12px" }}><img src="/logo-navy.png" alt="PunjKash" style={{ height: 40, width: "auto" }} /><a className="menu-btn" href="#" aria-label="Close menu"><I.close /></a></div>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "4px 0 12px" }}><img src="/logo-navy.png" alt="PunjKash" style={{ height: 56, width: "auto" }} /><a className="menu-btn" href="#" aria-label="Close menu"><I.close /></a></div>
           {site.nav.map((n) => <a key={n.href} className="item" href={n.href}>{n.label}<span className="faint">›</span></a>)}
           <a className="item" href="/bookings">My bookings<span className="faint">›</span></a>
           <a className="item" href="/about">About PunjKash<span className="faint">›</span></a>
@@ -46,7 +46,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <main>{children}</main>
         <footer className="site">
           <div className="wrap cols">
-            <div><img src="/logo-white.png" alt="PunjKash" style={{ height: 40, width: "auto", alignSelf: "flex-start" }} /><span>{site.legalName}<br />{site.address}<br />NTN {site.ntn}</span></div>
+            <div><img src="/logo-white.png" alt="PunjKash" style={{ height: 76, width: "auto", alignSelf: "flex-start" }} /><span>{site.legalName}<br />{site.address}<br />NTN {site.ntn}</span></div>
             <div><strong>Travel</strong>{site.nav.map((n) => <Link key={n.href} href={n.href}>{n.label}</Link>)}</div>
             <div><strong>Talk to us</strong>{site.partners.map((p) => <a key={p.wa} href={`tel:+${p.wa}`}>{p.name} · {p.phone}</a>)}<a href={`mailto:${site.email}`}>{site.email}</a></div>
             <div><strong>Company</strong><Link href="/about">About</Link><Link href="/how-to-book">How to book and pay</Link><Link href="/policies">Policies</Link><Link href="/contact">Contact</Link><Link href="/credits">Photo credits</Link></div>
