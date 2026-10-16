@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next";
-import "@fontsource-variable/bricolage-grotesque";
-import "@fontsource-variable/source-sans-3";
+import "@fontsource-variable/fraunces";
+import "@fontsource-variable/plus-jakarta-sans";
 import Link from "next/link";
 import "./globals.css";
 import { site, waLink } from "@/lib/site";
@@ -9,9 +9,10 @@ import BottomNav from "@/components/BottomNav";
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
+  alternates: { canonical: "./" },
   title: { default: `${site.name} · Flights, Holidays, Umrah & Hajj from Pakistan · ${site.partners[0].phone}`, template: `%s · PunjKash` },
   description: "Flights, holidays, Umrah and Hajj packages, tours of Pakistan, hotels and visa support. Every hotel named, every price per room type, reserve online with a deposit. Lahore, Pakistan.",
-  openGraph: { siteName: site.name, type: "website", locale: "en_PK", images: ["/img/makkah.webp"] },
+  openGraph: { siteName: site.name, type: "website", locale: "en_PK", images: ["/img/maldives-1600.webp"] },
   manifest: "/manifest.webmanifest",
   appleWebApp: { capable: true, title: "PunjKash", statusBarStyle: "default" },
   icons: { icon: "/icon-192.png", apple: "/icon-180.png" },
