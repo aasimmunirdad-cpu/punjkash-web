@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import "@fontsource-variable/fraunces";
+import "@fontsource/noto-nastaliq-urdu/arabic-700.css";
 import "@fontsource-variable/plus-jakarta-sans";
 import Link from "next/link";
 import "./globals.css";

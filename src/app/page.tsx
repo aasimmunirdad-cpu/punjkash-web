@@ -110,7 +110,7 @@ export default async function Home() {
       </section>
 
       <section className="wrap" style={{ textAlign: "center", padding: "20px 16px 8px" }}>
-        <img src="/urdu-gold.png" alt="پنج کاش" style={{ height: "clamp(64px,12vw,110px)", width: "auto", display: "inline-block" }} />
+        <p lang="ur" dir="rtl" style={{ fontFamily: "'Noto Nastaliq Urdu', serif", fontWeight: 700, color: "var(--gold)", fontSize: "clamp(44px,9vw,80px)", lineHeight: 1.7, margin: 0 }}>پنج کاش</p>
       </section>
 
       <section className="section wrap" style={{ paddingBottom: 48 }}>
