@@ -10,13 +10,13 @@ import { pkr, site, waLink } from "@/lib/site";
 export const dynamic = "force-dynamic";
 
 const SLIDES: Slide[] = [
-  { img: "/img/makkah.webp", alt: "Masjid al-Haram, Makkah", place: "Makkah", line: "Umrah from PKR 260,500", href: "/umrah" },
   { img: "/img/maldives.webp", alt: "Maldives lagoon", place: "Maldives", line: "Honeymoon, 4 nights from 385,000", href: "/holidays/maldives-4-nights" },
-  { img: "/img/hunza.webp", alt: "Hunza valley", place: "Hunza", line: "7 days in the north from 98,000", href: "/tours/hunza-7-days" },
   { img: "/img/dubai.webp", alt: "Dubai skyline", place: "Dubai", line: "Flights from 72,900 return", href: "/flights?from=LHE&to=Dubai" },
+  { img: "/img/makkah.webp", alt: "Masjid al-Haram, Makkah", place: "Makkah", line: "Umrah from PKR 260,500", href: "/umrah" },
+  { img: "/img/hunza.webp", alt: "Hunza valley", place: "Hunza", line: "7 days in the north from 98,000", href: "/tours/hunza-7-days" },
   { img: "/img/istanbul.webp", alt: "Istanbul at sunset", place: "Istanbul", line: "5 nights from 245,000", href: "/holidays/istanbul-5-nights" },
-  { img: "/img/madinah.webp", alt: "Al-Masjid an-Nabawi, Madinah", place: "Madinah", line: "Ramadan 2027 is open", href: "/umrah?month=2027-03" },
   { img: "/img/skardu.webp", alt: "Skardu", place: "Skardu", line: "6 days from 112,000", href: "/tours/skardu-6-days" },
+  { img: "/img/madinah.webp", alt: "Al-Masjid an-Nabawi, Madinah", place: "Madinah", line: "Ramadan 2027 is open", href: "/umrah?month=2027-03" },
   { img: "/img/baku.webp", alt: "Baku at night", place: "Baku", line: "5 nights from 215,000", href: "/holidays/baku-5-nights" },
 ];
 
