@@ -1,40 +1,30 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
+import ProductPage from "@/components/ProductPage";
 import SampleNote from "@/components/SampleNote";
-import LeadForm from "@/components/LeadForm";
+import { I } from "@/components/Icons";
 import { holidays } from "@/lib/catalog";
-import { pkr, site, waLink } from "@/lib/site";
+import { holidayImg } from "@/lib/img";
+import { pkr } from "@/lib/site";
 
 export function generateStaticParams() { return holidays.map((h) => ({ slug: h.slug })); }
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
-  const { slug } = await params;
-  const h = holidays.find((x) => x.slug === slug);
-  return h ? { title: `${h.title}, ${h.nights} nights from ${pkr(h.from)}`, description: `${h.city}, ${h.country}. ${h.includes.join(", ")}. Book with PunjKash, Lahore.` } : {};
+  const { slug } = await params; const h = holidays.find((x) => x.slug === slug);
+  return h ? { title: `${h.title}, ${h.nights} nights from ${pkr(h.from)}`, description: `${h.city}, ${h.country}. ${h.includes.join(", ")}. Reserve online with PunjKash, Lahore.`, openGraph: { images: [holidayImg(h.slug, 1600)] } } : {};
 }
 
 export default async function Holiday({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = await params;
-  const h = holidays.find((x) => x.slug === slug);
+  const { slug } = await params; const h = holidays.find((x) => x.slug === slug);
   if (!h) notFound();
-  const wa = waLink(`Assalam o Alaikum, I am interested in the ${h.title} holiday (${h.nights} nights). Travellers: __ Dates: __`);
+  const others = holidays.filter((x) => x.region === h.region && x.slug !== h.slug).slice(0, 2);
   return (
-    <div className="wrap" style={{ padding: "28px 0 0", display: "flex", flexDirection: "column", gap: 24 }}>
-      <nav className="faint" style={{ fontSize: 14 }}><Link href="/">Home</Link> › <Link href="/holidays">Holidays</Link> › {h.country}</nav>
-      <div className="grid g2" style={{ gridTemplateColumns: "minmax(0,1fr) 380px" }}>
-        <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-          <div style={{ display: "flex", gap: 8 }}><span className="tag">{h.country}</span><span className="tag tag-gold">{h.nights} nights</span><span className="tag" style={{ background: "#EEF2F5", color: "var(--muted)" }}>{h.stars}</span></div>
-          <h1 style={{ fontSize: "clamp(28px,4vw,42px)" }}>{h.title}</h1>
-          <div className="photo" style={{ height: 320 }}>Photo: {h.city}</div>
-          <SampleNote />
-          <div className="card" style={{ gap: 10 }}><h3>What is included</h3><ul className="muted" style={{ margin: 0, paddingLeft: 20, display: "flex", flexDirection: "column", gap: 6 }}>{h.includes.map((i) => <li key={i}>{i}</li>)}</ul></div>
-          <div className="grid g2"><div className="card"><span className="faint" style={{ fontSize: 13, letterSpacing: ".06em", textTransform: "uppercase" }}>Hotel</span><h3>{h.hotel}</h3><span className="muted">{h.city}</span></div><div className="card"><span className="faint" style={{ fontSize: 13, letterSpacing: ".06em", textTransform: "uppercase" }}>Departures</span><h3>{h.departures.join(", ")}</h3><span className="muted">From Lahore, Islamabad or Karachi</span></div></div>
-        </div>
-        <aside style={{ display: "flex", flexDirection: "column", gap: 16, alignSelf: "start", position: "sticky", top: 90 }}>
-          <div className="card" style={{ gap: 14, borderColor: "var(--gold)" }}><div><span className="faint" style={{ fontSize: 13 }}>Per person, twin sharing, from</span><div className="price" style={{ fontSize: 32 }}>{pkr(h.from)}</div></div><a className="btn btn-wa" href={wa}>Get this quote on WhatsApp</a><a className="btn btn-line" href={`tel:+${site.partners[0].wa}`}>Call {site.partners[0].phone}</a></div>
-          <div className="card" style={{ gap: 12 }}><h3 style={{ fontSize: 18 }}>Or send an enquiry</h3><LeadForm code={`HOL-${h.slug}`} pagePath={`/holidays/${h.slug}`} /></div>
-        </aside>
-      </div>
-    </div>
+    <ProductPage crumbs={[["Home", "/"], ["Holidays", "/holidays"]]} chips={[h.country, `${h.nights} nights`, h.stars]} title={h.title} sub={`${h.city}. ${h.highlight}.`}
+      images={[holidayImg(h.slug, 1600), ...others.map((o) => holidayImg(o.slug)), "/img/dubai-800.webp"]} alt={h.city}
+      price={h.from} priceNote="Per person, twin sharing, from" reserveHref={`/reserve?item=HOL-${h.slug}&price=${h.from}`} waText={`Assalam o Alaikum, I am interested in the ${h.title} holiday (${h.nights} nights).`}>
+      <SampleNote />
+      <div className="card card-body"><h3>What is included</h3><ul style={{ margin: 0, paddingLeft: 0, listStyle: "none", display: "grid", gap: 6 }}>{h.includes.map((i) => <li key={i} style={{ display: "flex", gap: 8 }}><span style={{ color: "var(--green)", flex: "none" }}><I.check /></span>{i}</li>)}</ul></div>
+      <div className="grid g2"><div className="card card-body"><div className="tiny muted">Hotel</div><h3>{h.hotel}</h3><span className="small muted">{h.city} · {h.stars}</span></div><div className="card card-body"><div className="tiny muted">Departures</div><h3>{h.departures.join(", ")}</h3><span className="small muted">From Lahore, Islamabad or Karachi</span></div></div>
+      <div className="card card-body"><h3>Good to know</h3><p className="small muted">Prices are per person sharing a twin room; single and triple on request. Child prices depend on age and bedding. Visa support is included where listed; embassy fees are shown on your confirmation. Hotels are as named or similar in the same category.</p></div>
+    </ProductPage>
   );
 }

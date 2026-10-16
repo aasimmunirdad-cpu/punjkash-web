@@ -1,82 +1,109 @@
 import Link from "next/link";
-import SearchBox from "@/components/SearchBox";
+import SearchCard from "@/components/SearchCard";
 import PackageRow from "@/components/PackageRow";
-import { facets, listPackages } from "@/lib/packages";
-import { destinations, flightRoutes, holidays, tours } from "@/lib/catalog";
+import { I } from "@/components/Icons";
+import { listPackages } from "@/lib/packages";
+import { destinations, flightRoutes, holidays, tours, SAMPLE } from "@/lib/catalog";
 import { pkr, site, waLink } from "@/lib/site";
 
 export const dynamic = "force-dynamic";
 
-const services = [
-  ["Flights", "/flights", "Worldwide, all airlines, group fares"],
-  ["Holidays", "/holidays", "Dubai, Istanbul, Baku, Maldives, Malaysia"],
-  ["Umrah & Hajj", "/umrah", "Packages, custom, Hajj 2027"],
-  ["Pakistan tours", "/tours", "Punjab, Kashmir, the north"],
-  ["Hotels", "/hotels", "Makkah, Madinah and abroad"],
-  ["Visas", "/visas", "Checklists, fees and filing"],
-];
+const IMG: Record<string, string> = { dubai: "dubai", istanbul: "istanbul", baku: "baku", kl: "kl", bangkok: "bangkok", maldives: "maldives", srilanka: "srilanka", egypt: "egypt", georgia: "georgia", london: "london", turkey: "turkey" };
+const holidayImg = (slug: string) => { const k = Object.keys(IMG).find((k) => slug.startsWith(k) || (k === "kl" && slug.startsWith("kuala")) || (k === "srilanka" && slug.startsWith("sri")) || (k === "turkey" && slug.startsWith("turkey"))); return `/img/${k ?? "dubai"}-800.webp`; };
+const tourImg = (slug: string) => { const k = ["hunza", "neelum", "skardu", "lahore", "swat", "naran", "murree"].find((k) => slug.startsWith(k)); return `/img/${k ?? "hunza"}-800.webp`; };
 
 export default async function Home() {
-  const [{ cities, months }, pkgs] = await Promise.all([facets(), listPackages({}, 4)]);
-  const deals = [...flightRoutes].filter((f) => f.cabin === "Economy" && !["ISB", "KHI", "LHE", "KDU", "GIL"].includes(f.toIata)).sort((a, b) => a.fare - b.fare).slice(0, 8);
+  const pkgs = await listPackages({}, 4);
+  const deals = [...flightRoutes].filter((f) => f.cabin === "Economy" && !["ISB", "KHI", "LHE", "KDU", "GIL"].includes(f.toIata)).sort((a, b) => a.fare - b.fare).slice(0, 6);
   return (
     <>
-      <section style={{ background: "var(--bg-soft)", padding: "44px 0 36px" }}>
-        <div className="wrap" style={{ display: "flex", flexDirection: "column", gap: 24 }}>
-          <div style={{ maxWidth: 820, display: "flex", flexDirection: "column", gap: 10 }}>
-            <h1>Flights, holidays, Umrah and Hajj, tours, hotels and visas. One place, one honest price.</h1>
-            <p className="muted" style={{ margin: 0, fontSize: 19 }}>From Lahore, Islamabad, Karachi and Multan to anywhere. Search below, or tell us where you want to go and we build it.</p>
-          </div>
-          <SearchBox cities={cities} months={months} active="umrah" />
-          <div style={{ display: "flex", gap: 36, flexWrap: "wrap" }}>
-            <div className="stat"><b>All major airlines</b>Saudia, Emirates, Qatar, Turkish, Etihad, PIA, Airblue, Air Sial</div>
-            <div className="stat"><b>Written quotation</b>before any payment, price held 7 days</div>
-            <div className="stat"><b>Partners you can name</b>{site.partners.map((p) => p.name.replace("Dr ", "")).join(" and ")}, Lahore</div>
-          </div>
+      <section className="hero">
+        <img className="bg" src="/img/makkah.webp" srcSet="/img/makkah-800.webp 800w, /img/makkah.webp 1600w" sizes="100vw" alt="Masjid al-Haram, Makkah" fetchPriority="high" />
+        <div className="wrap">
+          <h1>Every journey, one honest price.</h1>
+          <p>Umrah with the hotel named and the distance measured. Flights, holidays, tours of Pakistan, hotels and visas, all from Lahore, reserved online in three steps.</p>
         </div>
       </section>
 
-      <section className="wrap" style={{ padding: "36px 0 0" }}>
-        <div className="grid g6">{services.map(([t, h, d]) => <Link key={t} href={h} className="card" style={{ gap: 4 }}><span className="display" style={{ fontWeight: 800, fontSize: 18 }}>{t}</span><span className="muted" style={{ fontSize: 15 }}>{d}</span></Link>)}</div>
-      </section>
+      <div className="wrap search-wrap">
+        <SearchCard />
+        <div className="trust">
+          <div><I.shield /> Reserve online, pay a deposit</div>
+          <div><I.check /> Hotel and distance on every package</div>
+          <div><I.doc /> Instant booking reference</div>
+          <div><I.phone /> A real person on the phone, 7 days</div>
+        </div>
+      </div>
 
-      <section className="wrap" style={{ padding: "48px 0 0", display: "flex", flexDirection: "column", gap: 16 }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", flexWrap: "wrap", gap: 10 }}><h2>Where do you want to go?</h2><Link href="/holidays" style={{ color: "var(--blue)", fontWeight: 600 }}>All holidays</Link></div>
-        <div className="grid g4">{destinations.map((d) => <Link key={d.name} href={d.href} className="photo" style={{ height: 200, flexDirection: "column", alignItems: "flex-start", gap: 2, color: "var(--ink)" }}><span className="display" style={{ fontSize: 20, fontWeight: 800 }}>{d.name}</span><span className="muted" style={{ fontSize: 14 }}>{d.tag}</span></Link>)}</div>
-      </section>
-
-      <section className="wrap" style={{ padding: "48px 0 0", display: "flex", flexDirection: "column", gap: 16 }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", flexWrap: "wrap", gap: 10 }}><h2>Flight deals this month</h2><Link href="/flights" style={{ color: "var(--blue)", fontWeight: 600 }}>All routes</Link></div>
-        <div className="grid g4">{deals.map((f) => <Link key={f.fromIata + f.toIata + f.airline} href={`/flights?from=${f.from}&to=${f.to}`} className="card" style={{ gap: 4 }}><span className="tag" style={{ alignSelf: "flex-start" }}>{f.airline} · {f.stops}</span><span className="display" style={{ fontWeight: 800, fontSize: 18 }}>{f.from} to {f.to}</span><span className="muted" style={{ fontSize: 14 }}>Return, per adult, from</span><span className="price" style={{ fontSize: 22 }}>{pkr(f.fare)}</span></Link>)}</div>
-        <span className="faint" style={{ fontSize: 13 }}>Sample fares for preview; live fares at launch.</span>
-      </section>
-
-      <section className="wrap" style={{ padding: "48px 0 0", display: "flex", flexDirection: "column", gap: 16 }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", flexWrap: "wrap", gap: 10 }}><h2>Umrah departing soon</h2><Link href="/umrah" style={{ color: "var(--blue)", fontWeight: 600 }}>All open departures</Link></div>
-        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>{pkgs.map((p) => <PackageRow key={p.id} p={p} />)}</div>
-      </section>
-
-      <section className="wrap" style={{ padding: "48px 0 0", display: "flex", flexDirection: "column", gap: 16 }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", flexWrap: "wrap", gap: 10 }}><h2>Holidays abroad</h2><Link href="/holidays" style={{ color: "var(--blue)", fontWeight: 600 }}>All packages</Link></div>
-        <div className="grid g4">{holidays.slice(0, 4).map((h) => <Link key={h.slug} href={`/holidays/${h.slug}`} className="card" style={{ gap: 6 }}><div className="photo" style={{ height: 140 }}>Photo: {h.city}</div><span className="tag tag-gold" style={{ alignSelf: "flex-start" }}>{h.nights} nights</span><h3 style={{ fontSize: 19 }}>{h.title}</h3><span className="muted" style={{ fontSize: 14 }}>{h.highlight}</span><span className="price" style={{ fontSize: 22, marginTop: "auto" }}>{pkr(h.from)}</span></Link>)}</div>
-      </section>
-
-      <section className="wrap" style={{ padding: "48px 0 0", display: "flex", flexDirection: "column", gap: 16 }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", flexWrap: "wrap", gap: 10 }}><h2>Punjab, Kashmir and the north</h2><Link href="/tours" style={{ color: "var(--blue)", fontWeight: 600 }}>All tours</Link></div>
-        <div className="grid g4">{tours.slice(0, 4).map((t) => <Link key={t.slug} href={`/tours/${t.slug}`} className="card" style={{ gap: 6 }}><div className="photo" style={{ height: 140 }}>Photo: {t.title}</div><span className="tag" style={{ alignSelf: "flex-start" }}>{t.region}</span><h3 style={{ fontSize: 19 }}>{t.title}</h3><span className="muted" style={{ fontSize: 14 }}>{t.days} days · {t.type}</span><span className="price" style={{ fontSize: 22, marginTop: "auto" }}>{pkr(t.from)}</span></Link>)}</div>
-      </section>
-
-      <section className="wrap" style={{ padding: "48px 0 0" }}>
-        <div className="grid g2" style={{ background: "var(--navy)", color: "#fff", borderRadius: 18, padding: 36, alignItems: "center" }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}><h2 style={{ color: "#fff" }}>Build your own Umrah</h2><p style={{ margin: 0, color: "#C8D3DC" }}>Pick hotels, nights, room type and transport. We price it the same day and send a written quotation on WhatsApp.</p></div>
-          <div style={{ display: "flex", gap: 12, justifyContent: "flex-end", flexWrap: "wrap" }}><a className="btn btn-gold" href={waLink("Assalam o Alaikum, I want to build a custom Umrah package. City, dates, hotels and travellers: ")}>Start on WhatsApp</a><Link className="btn" style={{ background: "var(--navy-2)", color: "#fff" }} href="/hajj">Hajj 2027</Link></div>
+      <section className="section wrap">
+        <div className="section-head"><div><h2>Where next?</h2><p>Pick a place, see what it costs.</p></div><Link className="more" href="/holidays">All destinations</Link></div>
+        <div className="rail">
+          {destinations.map((d) => (
+            <Link key={d.name} href={d.href} className="tile"><img src={`/img/${d.img}-800.webp`} alt={d.name} loading="lazy" width={800} height={600} /><div><b>{d.name}</b><span>{d.tag}</span></div></Link>
+          ))}
         </div>
       </section>
 
-      <section className="wrap grid g3" style={{ padding: "40px 0 0" }}>
-        <div className="card" style={{ gap: 10 }}><h3>How booking works</h3><ol className="muted" style={{ margin: 0, paddingLeft: 20, display: "flex", flexDirection: "column", gap: 4, fontSize: 15 }}><li>Pick a package or build one, tap WhatsApp.</li><li>We confirm seats and rooms the same day.</li><li>Written quotation, price held 7 days.</li><li>Deposit by bank, JazzCash or Easypaisa.</li><li>Documents, briefing, departure.</li></ol></div>
-        <div className="card" style={{ gap: 10 }}><h3>Who you are dealing with</h3><p className="muted" style={{ margin: 0, fontSize: 15 }}>{site.legalName}, NTN {site.ntn}. {site.address}. Partners {site.partners[0].name} and {site.partners[1].name} take every call.</p><Link className="btn btn-line btn-sm" style={{ alignSelf: "flex-start" }} href="/about">Meet the partners</Link></div>
-        <div className="card" style={{ gap: 10 }}><h3>Talk to us now</h3>{site.partners.map((p) => <a key={p.wa} href={`tel:+${p.wa}`} style={{ fontWeight: 600 }}>{p.name} · {p.phone}</a>)}<a className="btn btn-wa btn-sm" style={{ alignSelf: "flex-start" }} href={waLink("Assalam o Alaikum")}>WhatsApp</a></div>
+      <section className="section wrap">
+        <div className="section-head"><div><h2>Umrah departing soon</h2><p>Named hotels, measured distances, four room types priced.</p></div><Link className="more" href="/umrah">All {" "}departures</Link></div>
+        <div style={{ display: "grid", gap: 12 }}>{pkgs.map((p, i) => <PackageRow key={p.id} p={p} photo={i % 2 ? "/img/madinah-800.webp" : "/img/makkah-800.webp"} />)}</div>
+      </section>
+
+      <section className="section wrap">
+        <div className="promo"><img src="/img/madinah.webp" alt="" loading="lazy" />
+          <div style={{ maxWidth: 560 }}><h2 style={{ color: "#fff" }}>Ramadan 2027 Umrah is open</h2><p style={{ opacity: .92, marginTop: 6 }}>Last ten nights fill first. Hold your room with a deposit today; the balance is due 45 days before departure.</p></div>
+          <Link className="btn btn-gold" href="/umrah?month=2027-03">See Ramadan packages</Link>
+        </div>
+      </section>
+
+      <section className="section wrap">
+        <div className="section-head"><div><h2>Flight deals</h2><p>Return, per adult, taxes included.</p></div><Link className="more" href="/flights">All routes</Link></div>
+        <div className="grid g3">
+          {deals.map((f) => (
+            <Link key={f.fromIata + f.toIata + f.airline} href={`/flights?from=${f.fromIata}&to=${f.to}`} className="card" style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", padding: "14px 16px", gap: 12 }}>
+              <div><div style={{ fontWeight: 700, fontSize: 17 }}>{f.from} <span className="faint">→</span> {f.to}</div><div className="small muted">{f.airline} · {f.stops}</div></div>
+              <div className="price" style={{ fontSize: 20 }}><small>PKR</small> {f.fare.toLocaleString("en-PK")}</div>
+            </Link>
+          ))}
+        </div>
+        {SAMPLE && <p className="tiny faint" style={{ marginTop: 8 }}>Sample fares shown for preview. Live fares at launch.</p>}
+      </section>
+
+      <section className="section wrap">
+        <div className="section-head"><div><h2>Holidays abroad</h2><p>Flights, hotel, transfers and visa in one price.</p></div><Link className="more" href="/holidays">All holidays</Link></div>
+        <div className="rail">
+          {holidays.slice(0, 8).map((h) => (
+            <Link key={h.slug} href={`/holidays/${h.slug}`} className="card"><div className="card-photo"><img src={holidayImg(h.slug)} alt={h.city} loading="lazy" width={800} height={600} /></div>
+              <div className="card-body"><span className="chip" style={{ alignSelf: "flex-start" }}>{h.nights} nights · {h.stars}</span><h3>{h.title}</h3><span className="small muted">{h.highlight}</span><div className="price" style={{ fontSize: 20, marginTop: "auto" }}><small>from PKR</small> {h.from.toLocaleString("en-PK")}</div></div></Link>
+          ))}
+        </div>
+      </section>
+
+      <section className="section wrap">
+        <div className="section-head"><div><h2>Pakistan, properly</h2><p>Punjab, Kashmir and the north. Private cars or small groups.</p></div><Link className="more" href="/tours">All tours</Link></div>
+        <div className="rail">
+          {tours.map((t) => (
+            <Link key={t.slug} href={`/tours/${t.slug}`} className="card"><div className="card-photo"><img src={tourImg(t.slug)} alt={t.title} loading="lazy" width={800} height={600} /></div>
+              <div className="card-body"><span className="chip" style={{ alignSelf: "flex-start" }}>{t.days} days · {t.type}</span><h3>{t.title}</h3><span className="small muted">{t.region} · {t.season}</span><div className="price" style={{ fontSize: 20, marginTop: "auto" }}><small>from PKR</small> {t.from.toLocaleString("en-PK")}</div></div></Link>
+          ))}
+        </div>
+      </section>
+
+      <section className="section wrap">
+        <div className="grid g3">
+          <div className="card card-body"><I.kaaba /><h3>Hajj 2027</h3><p className="small muted">Registration opens with the Saudi announcement. Join the list and we call you first.</p><Link className="more" href="/hajj" style={{ alignSelf: "flex-start" }}>Join the Hajj list</Link></div>
+          <div className="card card-body"><I.passport /><h3>Visas done right</h3><p className="small muted">Checklists, fees and filing for UAE, Turkey, Malaysia, Thailand, Azerbaijan, UK and Schengen.</p><Link className="more" href="/visas" style={{ alignSelf: "flex-start" }}>Check a visa</Link></div>
+          <div className="card card-body"><I.user /><h3>Groups and families</h3><p className="small muted">Ten or more travellers, a family Umrah, a company retreat. One quote, one person handling it.</p><a className="more" href={waLink("Assalam o Alaikum, I want a group quote.")} style={{ alignSelf: "flex-start" }}>Ask for a group quote</a></div>
+        </div>
+      </section>
+
+      <section className="section wrap" style={{ paddingBottom: 48 }}>
+        <div className="steps">
+          <div><b>Choose</b><span>Search, compare hotels and prices, pick a room type.</span></div>
+          <div><b>Reserve</b><span>Enter travellers, pay a deposit by bank, JazzCash or Easypaisa.</span></div>
+          <div><b>Travel</b><span>Get your PK reference at once, vouchers and tickets before you fly.</span></div>
+        </div>
+        <p className="small muted" style={{ marginTop: 14 }}>{site.legalName}, Lahore. Prefer a conversation? {site.partners[0].name} answers on {site.partners[0].phone}.</p>
       </section>
     </>
   );

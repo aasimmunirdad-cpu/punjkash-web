@@ -40,7 +40,8 @@ export async function listPackages(f: Filters = {}, limit = 60): Promise<Package
     const end = new Date(Date.UTC(y, m, 0)).toISOString().slice(0, 10);
     conds.push(gte(packages.departDate, start), lte(packages.departDate, end));
   }
-  if (f.days === "15") conds.push(lte(packages.days, 16));
+  if (f.days && f.days.includes("-")) { const [lo, hi] = f.days.split("-").map(Number); conds.push(and(gte(packages.days, lo), lte(packages.days, hi))!); }
+  else if (f.days === "15") conds.push(lte(packages.days, 16));
   else if (f.days === "21") conds.push(and(gte(packages.days, 18), lte(packages.days, 22))!);
   else if (f.days === "28") conds.push(gte(packages.days, 25));
 
@@ -72,7 +73,7 @@ export async function listPackages(f: Filters = {}, limit = 60): Promise<Package
   });
 
   if (f.room) cards = cards.filter((c) => c.tiers[f.room!] != null);
-  if (f.budget) { const b = Number(f.budget); if (b > 0) cards = cards.filter((c) => c.fromPrice <= b); }
+  if (f.budget) { const [lo, hi] = f.budget.includes("-") ? f.budget.split("-").map(Number) : [0, Number(f.budget)]; if (hi > 0) cards = cards.filter((c) => c.fromPrice >= lo && c.fromPrice <= hi); }
   if (f.distance === "500") cards = cards.filter((c) => (c.makkah?.distanceM ?? 9999) <= 500);
   if (f.distance === "shuttle") cards = cards.filter((c) => /shuttle/i.test(c.makkah?.distanceLabel ?? ""));
   if (f.sort === "price") cards.sort((a, b) => a.fromPrice - b.fromPrice);
@@ -108,4 +109,9 @@ export async function facets() {
 
 export async function allSlugs() {
   return db.select({ slug: packages.slug, updatedAt: packages.updatedAt }).from(packages).where(inArray(packages.status, ["open", "few", "sold"]));
+}
+
+export async function getPackageByCode(code: string) {
+  const [r] = await db.select({ slug: packages.slug }).from(packages).where(eq(packages.code, code.toUpperCase()));
+  return r ? getPackage(r.slug) : null;
 }

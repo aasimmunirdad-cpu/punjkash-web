@@ -1,35 +1,36 @@
 import type { Metadata } from "next";
+import PageHero from "@/components/PageHero";
 import SampleNote from "@/components/SampleNote";
 import { hotelOffers } from "@/lib/catalog";
-import { pkr, waLink } from "@/lib/site";
+import { cityImg } from "@/lib/img";
 
 export const metadata: Metadata = { title: "Hotels in Makkah, Madinah and abroad", description: "Hotel-only bookings in Makkah and Madinah by distance from the Haram, and hotels in Dubai, Istanbul, Baku, Gilgit and Skardu, from PunjKash." };
+type SP = Record<string, string | undefined>;
 
-export default function Hotels() {
-  const groups = [...new Set(hotelOffers.map((h) => h.city))];
+export default async function Hotels({ searchParams }: { searchParams: Promise<SP> }) {
+  const sp = await searchParams;
+  const q = (sp.city ?? "").trim().toLowerCase();
+  const list = hotelOffers.filter((h) => !q || h.city.toLowerCase().includes(q) || h.name.toLowerCase().includes(q));
+  const groups = [...new Set(list.map((h) => h.city))];
+  const nights = sp.in && sp.out ? Math.max(1, Math.round((new Date(sp.out).getTime() - new Date(sp.in).getTime()) / 864e5)) : 0;
   return (
     <>
-      <section style={{ background: "var(--bg-soft)", padding: "32px 0" }}><div className="wrap" style={{ display: "flex", flexDirection: "column", gap: 18 }}><h1 style={{ fontSize: "clamp(28px,4vw,40px)" }}>Hotels, by distance, not by star claims</h1>
-        <form className="searchbox" method="get"><div className="srow" style={{ gridTemplateColumns: "repeat(4,minmax(0,1fr)) auto" }}>
-          <div className="field"><label htmlFor="city">City</label><select id="city" name="city"><option>Makkah</option><option>Madinah</option><option>Dubai</option><option>Istanbul</option><option>Baku</option><option>Skardu</option><option>Gilgit</option></select></div>
-          <div className="field"><label htmlFor="in">Check-in</label><input id="in" name="in" type="date" /></div>
-          <div className="field"><label htmlFor="out">Check-out</label><input id="out" name="out" type="date" /></div>
-          <div className="field"><label htmlFor="rooms">Rooms and guests</label><select id="rooms" name="rooms"><option>1 room, 2 guests</option><option>1 room, 4 guests</option><option>2 rooms, 4 guests</option></select></div>
-          <button className="btn btn-gold" type="submit">Search hotels</button></div></form></div></section>
-      <section className="wrap" style={{ padding: "28px 0 0", display: "flex", flexDirection: "column", gap: 24 }}>
+      <PageHero img="madinah" alt="Madinah" title="Hotels, by distance, not by star claims" intro="Makkah and Madinah priced by walking distance to the Haram. Dubai, Istanbul, Baku and the north too." tab="hotels" />
+      <section className="section wrap" style={{ display: "grid", gap: 24, paddingBottom: 48 }}>
         <SampleNote what="Nightly rates" />
         {groups.map((city) => (
-          <div key={city} style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+          <div key={city} style={{ display: "grid", gap: 12 }}>
             <h2>{city}</h2>
-            {hotelOffers.filter((h) => h.city === city).map((h) => (
-              <div key={h.name} className="card pkg-row">
-                <div className="photo" style={{ width: 160, height: 100, flex: "none" }}>Photo</div>
-                <div className="body"><h3>{h.name}</h3><div className="muted" style={{ fontSize: 15 }}>{h.distance} · {h.type} · {h.board}</div></div>
-                <div className="side"><div style={{ textAlign: "right" }}><div className="faint" style={{ fontSize: 13 }}>Per night from</div><div className="price">{pkr(h.perNight)}</div></div><a className="btn btn-wa btn-sm" href={waLink(`Assalam o Alaikum, I want to book ${h.name}, ${h.city}. Dates: __ Rooms: __`)}>Check dates</a></div>
+            {list.filter((h) => h.city === city).map((h) => (
+              <div key={h.name} className="card pkg">
+                <div className="photo"><img src={cityImg(h.city)} alt="" loading="lazy" width={800} height={400} /></div>
+                <div className="body"><div style={{ display: "flex", gap: 6 }}><span className="chip">{h.type}</span><span className="chip">{h.board}</span></div><h3>{h.name}</h3><div className="small muted">{h.distance}</div></div>
+                <div className="foot"><div><div className="tiny muted">Per night from</div><div className="price"><small>PKR</small> {h.perNight.toLocaleString("en-PK")}</div>{nights > 0 && <div className="tiny muted">{nights} nights {(h.perNight * nights).toLocaleString("en-PK")}</div>}</div><a className="btn btn-gold btn-sm" href={`/reserve?item=HTL-${encodeURIComponent(h.name)}&price=${h.perNight * (nights || 1)}&in=${sp.in ?? ""}&out=${sp.out ?? ""}&rooms=${sp.rooms ?? 1}&pax=${sp.pax ?? "2-0-0"}`}>Reserve</a></div>
               </div>
             ))}
           </div>
         ))}
+        {!list.length && <div className="card card-body" style={{ textAlign: "center", padding: 28 }}><h3>No hotel listed in {sp.city} yet</h3><p className="muted">We book hotels in any city; reserve with the details and we confirm the property.</p><a className="btn btn-gold" style={{ justifySelf: "center" }} href={`/reserve?item=HTL-${encodeURIComponent(sp.city ?? "")}&price=0&in=${sp.in ?? ""}&out=${sp.out ?? ""}`}>Request a hotel</a></div>}
       </section>
     </>
   );

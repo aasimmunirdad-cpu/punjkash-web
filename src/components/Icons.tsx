@@ -1,0 +1,23 @@
+const p = { width: 24, height: 24, viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: 1.8, strokeLinecap: "round" as const, strokeLinejoin: "round" as const, "aria-hidden": true };
+export const I = {
+  plane: () => <svg {...p}><path d="M2.5 19l19-7-19-7v5l13 2-13 2z" /></svg>,
+  kaaba: () => <svg {...p}><path d="M4 8l8-4 8 4v10l-8 4-8-4z" /><path d="M4 8l8 4 8-4M12 12v10M4 11.5h16" /></svg>,
+  sun: () => <svg {...p}><circle cx="12" cy="12" r="4" /><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" /></svg>,
+  mountain: () => <svg {...p}><path d="M3 20l6-11 4 6 2-3 6 8z" /><path d="M9 9l1.5-2.5L12 9" /></svg>,
+  bed: () => <svg {...p}><path d="M3 18V8a2 2 0 012-2h3a2 2 0 012 2v2h9a2 2 0 012 2v6M3 15h18M3 20v-2M21 20v-2" /></svg>,
+  passport: () => <svg {...p}><rect x="5" y="3" width="14" height="18" rx="2" /><circle cx="12" cy="10" r="3" /><path d="M8 17h8" /></svg>,
+  tag: () => <svg {...p}><path d="M20 12l-8 8-9-9V3h8z" /><circle cx="7.5" cy="7.5" r="1.5" /></svg>,
+  search: () => <svg {...p}><circle cx="11" cy="11" r="7" /><path d="M20 20l-3.5-3.5" /></svg>,
+  home: () => <svg {...p}><path d="M3 11l9-8 9 8v9a1 1 0 01-1 1h-5v-6H9v6H4a1 1 0 01-1-1z" /></svg>,
+  ticket: () => <svg {...p}><path d="M3 9a2 2 0 002-2V5h14v2a2 2 0 000 4v2a2 2 0 000 4v2H5v-2a2 2 0 00-2-2z" /><path d="M13 5v14" strokeDasharray="2 3" /></svg>,
+  user: () => <svg {...p}><circle cx="12" cy="8" r="4" /><path d="M4 21a8 8 0 0116 0" /></svg>,
+  wa: () => <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 00-8.6 15.1L2 22l5.1-1.3A10 10 0 1012 2zm0 18.2a8.2 8.2 0 01-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1112 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 01-3.3-2.9c-.2-.4.3-.4.7-1.3.1-.2 0-.3 0-.5l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 00-.7.3 3 3 0 00-.9 2.2 5.2 5.2 0 001.1 2.8 12 12 0 004.6 4c.6.3 1.1.4 1.5.5.6.2 1.2.2 1.6.1.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.1-1.2l-.5-.2z" /></svg>,
+  phone: () => <svg {...p}><path d="M5 3h4l2 5-2.5 1.5a11 11 0 006 6L16 13l5 2v4a2 2 0 01-2 2A17 17 0 013 5a2 2 0 012-2z" /></svg>,
+  check: () => <svg {...p}><path d="M20 6L9 17l-5-5" /></svg>,
+  menu: () => <svg {...p}><path d="M4 7h16M4 12h16M4 17h16" /></svg>,
+  close: () => <svg {...p}><path d="M6 6l12 12M18 6L6 18" /></svg>,
+  filter: () => <svg {...p}><path d="M4 6h16M7 12h10M10 18h4" /></svg>,
+  star: () => <svg {...p}><path d="M12 3l2.8 5.7 6.2.9-4.5 4.4 1 6.2L12 17.3 6.5 20.2l1-6.2L3 9.6l6.2-.9z" /></svg>,
+  doc: () => <svg {...p}><path d="M6 3h8l4 4v14H6z" /><path d="M14 3v4h4M9 13h6M9 17h6" /></svg>,
+  shield: () => <svg {...p}><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z" /><path d="M9 12l2 2 4-4" /></svg>,
+};

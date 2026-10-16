@@ -1,35 +1,37 @@
 import Link from "next/link";
 import type { PackageCard } from "@/lib/packages";
-import { TIERS } from "@/lib/packages";
 import { fmtDate } from "@/lib/site";
+import { I } from "./Icons";
 
-const hotelLine = (h: PackageCard["makkah"], nights: number | null, city: string) => {
-  if (!h) return null;
-  const d = h.distanceM ? `${h.distanceM} m from Haram` : h.distanceLabel ?? "";
-  return `${city}: ${h.name}${d ? `, ${d}` : ""}${nights ? `, ${nights} nights` : ""}`;
-};
+const dist = (h: PackageCard["makkah"]) => (h?.distanceM ? `${h.distanceM} m from Haram` : h?.distanceLabel ?? "");
 
-export default function PackageRow({ p }: { p: PackageCard }) {
-  const seats = p.seats != null && p.seats <= 10 ? `Only ${p.seats} seats` : p.status === "few" ? "Few seats" : null;
+export default function PackageRow({ p, photo = "/img/makkah-800.webp" }: { p: PackageCard; photo?: string }) {
+  const seats = p.seats != null && p.seats <= 10 ? `Only ${p.seats} seats left` : p.status === "few" ? "Few seats left" : null;
+  const href = `/umrah/${p.slug}`;
   return (
-    <article className="card pkg-row">
+    <article className="card pkg">
+      <Link className="photo" href={href} aria-hidden tabIndex={-1}><img src={photo} alt="" loading="lazy" width={800} height={400} /></Link>
       <div className="body">
-        <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-          <span className="tag">Ref {p.code}</span><span className="tag tag-gold">{p.days} days</span>
-          {seats && <span className="tag tag-few">{seats}</span>}
-          {p.discountBadge && <span className="tag tag-gold">Discount available on call</span>}
+        <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+          <span className="chip">{p.days} days</span>
+          <span className="chip">{p.nightsMakkah ?? 0}N Makkah · {p.nightsMadinah ?? 0}N Madinah</span>
+          {seats && <span className="chip chip-hot">{seats}</span>}
+          {p.discountBadge && <span className="chip chip-gold">Discount on call</span>}
         </div>
-        <h3><Link href={`/umrah/${p.slug}`}>{fmtDate(p.departDate)} · {p.departureCity} to Jeddah{p.airline ? ` · ${p.airline}` : ""}</Link></h3>
-        <div className="muted" style={{ fontSize: 15 }}>
-          {hotelLine(p.makkah, p.nightsMakkah, "Makkah")}<br />{hotelLine(p.madinah, p.nightsMadinah, "Madinah")}
+        <h3><Link href={href}>{fmtDate(p.departDate)} from {p.departureCity}{p.airline ? ` · ${p.airline}` : ""}</Link></h3>
+        <div className="small muted" style={{ display: "grid", gap: 2 }}>
+          {p.makkah && <span><I.bed /> <b style={{ color: "var(--ink)" }}>{p.makkah.name}</b>, Makkah{dist(p.makkah) ? ` · ${dist(p.makkah)}` : ""}</span>}
+          {p.madinah && <span><I.bed /> <b style={{ color: "var(--ink)" }}>{p.madinah.name}</b>, Madinah{dist(p.madinah) ? ` · ${dist(p.madinah)}` : ""}</span>}
         </div>
+        <div className="tiny faint">Ref {p.code} · {p.transport ?? "Transport included"} · Umrah visa included</div>
       </div>
-      <div className="side">
-        <div style={{ textAlign: "right" }}>
-          <div className="faint" style={{ fontSize: 13 }}>{TIERS.filter((t) => p.tiers[t] != null).map((t) => t[0].toUpperCase() + t.slice(1)).join(" · ")}, per person</div>
-          <div className="price">{TIERS.filter((t) => p.tiers[t] != null).map((t) => p.tiers[t]!.toLocaleString("en-PK")).join(" · ")}</div>
+      <div className="foot">
+        <div>
+          <div className="tiny muted">{p.fromTier} room, per person</div>
+          <div className="price"><small>PKR</small> {p.fromPrice.toLocaleString("en-PK")}</div>
+          {p.tiers.double && p.fromTier !== "double" && <div className="tiny muted">Double {p.tiers.double.toLocaleString("en-PK")}</div>}
         </div>
-        <Link className="btn btn-line" href={`/umrah/${p.slug}`}>View</Link>
+        <Link className="btn btn-navy btn-sm" href={href}>See details</Link>
       </div>
     </article>
   );

@@ -33,12 +33,15 @@ var import_postgres = __toESM(require("postgres"));
 // src/db/schema.ts
 var schema_exports = {};
 __export(schema_exports, {
+  bookingStatus: () => bookingStatus,
+  bookings: () => bookings,
   cityName: () => cityName,
   hotels: () => hotels,
   leadStatus: () => leadStatus,
   leads: () => leads,
   packageStatus: () => packageStatus,
   packages: () => packages,
+  payMethod: () => payMethod,
   priceTiers: () => priceTiers,
   priceType: () => priceType,
   productType: () => productType,
@@ -135,6 +138,38 @@ var leads = (0, import_pg_core.pgTable)("leads", {
   assignedTo: (0, import_pg_core.text)("assigned_to"),
   createdAt: (0, import_pg_core.timestamp)("created_at").defaultNow().notNull()
 });
+var bookingStatus = (0, import_pg_core.pgEnum)("booking_status", ["reserved", "deposit_pending", "deposit_received", "confirmed", "cancelled"]);
+var payMethod = (0, import_pg_core.pgEnum)("pay_method", ["bank", "jazzcash", "easypaisa", "card", "cash"]);
+var bookings = (0, import_pg_core.pgTable)("bookings", {
+  id: (0, import_pg_core.serial)("id").primaryKey(),
+  ref: (0, import_pg_core.text)("ref").notNull().unique(),
+  product: (0, import_pg_core.text)("product").notNull(),
+  // U H T V A F HT
+  itemCode: (0, import_pg_core.text)("item_code").notNull(),
+  title: (0, import_pg_core.text)("title").notNull(),
+  packageId: (0, import_pg_core.integer)("package_id").references(() => packages.id, { onDelete: "set null" }),
+  room: (0, import_pg_core.text)("room"),
+  adults: (0, import_pg_core.integer)("adults").notNull().default(1),
+  children: (0, import_pg_core.integer)("children").notNull().default(0),
+  infants: (0, import_pg_core.integer)("infants").notNull().default(0),
+  travellers: (0, import_pg_core.jsonb)("travellers").$type().notNull().default([]),
+  leadName: (0, import_pg_core.text)("lead_name").notNull(),
+  phone: (0, import_pg_core.text)("phone").notNull(),
+  email: (0, import_pg_core.text)("email"),
+  city: (0, import_pg_core.text)("city"),
+  travelDate: (0, import_pg_core.text)("travel_date"),
+  details: (0, import_pg_core.jsonb)("details").$type().notNull().default({}),
+  total: (0, import_pg_core.integer)("total").notNull().default(0),
+  deposit: (0, import_pg_core.integer)("deposit").notNull().default(0),
+  paid: (0, import_pg_core.integer)("paid").notNull().default(0),
+  payMethod: payMethod("pay_method"),
+  payRef: (0, import_pg_core.text)("pay_ref"),
+  status: bookingStatus("status").notNull().default("reserved"),
+  notes: (0, import_pg_core.text)("notes"),
+  pagePath: (0, import_pg_core.text)("page_path"),
+  createdAt: (0, import_pg_core.timestamp)("created_at").defaultNow().notNull(),
+  updatedAt: (0, import_pg_core.timestamp)("updated_at").defaultNow().notNull()
+}, (t) => [(0, import_pg_core.index)("bookings_phone").on(t.phone), (0, import_pg_core.index)("bookings_created").on(t.createdAt)]);
 
 // src/db/index.ts
 var url = process.env.DATABASE_URL ?? "postgres://postgres:postgres@localhost:5432/punjkash";

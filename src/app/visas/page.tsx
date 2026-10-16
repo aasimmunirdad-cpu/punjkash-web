@@ -1,29 +1,33 @@
 import type { Metadata } from "next";
+import PageHero from "@/components/PageHero";
 import SampleNote from "@/components/SampleNote";
 import { visas } from "@/lib/catalog";
-import { pkr, waLink } from "@/lib/site";
 
 export const metadata: Metadata = { title: "Visa support from Pakistan", description: "Umrah, UAE, Turkey, Azerbaijan, Malaysia, Thailand, Sri Lanka, Egypt, UK and Schengen visa checklists, fees and processing times from PunjKash, Lahore." };
+type SP = Record<string, string | undefined>;
 
-export default function Visas() {
+export default async function Visas({ searchParams }: { searchParams: Promise<SP> }) {
+  const sp = await searchParams; const q = (sp.country ?? "").trim().toLowerCase();
+  const list = visas.filter((v) => !q || v.country.toLowerCase().includes(q) || (q === "dubai" && v.country === "UAE"));
   return (
     <>
-      <section style={{ background: "var(--bg-soft)", padding: "32px 0" }}><div className="wrap" style={{ display: "flex", flexDirection: "column", gap: 10 }}><h1 style={{ fontSize: "clamp(28px,4vw,40px)" }}>Visa support, with the checklist before the fee</h1><p className="muted" style={{ margin: 0, fontSize: 18 }}>Which documents, how long, and what it costs, stated before you commit. Embassy fees are shown separately from our service fee.</p></div></section>
-      <section className="wrap" style={{ padding: "28px 0 0", display: "flex", flexDirection: "column", gap: 14 }}>
+      <PageHero img="london" alt="London" title="Visa support, with the checklist before the fee" intro="Which documents, how long, and what it costs, stated before you commit. Embassy fees are shown apart from our service fee." tab="visas" />
+      <section className="section wrap" style={{ display: "grid", gap: 14, paddingBottom: 48 }}>
         <SampleNote what="Fees" />
         <div className="grid g2">
-          {visas.map((v) => (
-            <div key={v.country} className="card" style={{ gap: 10 }}>
-              <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}><span className="tag">{v.type}</span><span className="tag tag-gold">{v.days}</span></div>
+          {list.map((v) => (
+            <div key={v.country} className="card card-body">
+              <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}><span className="chip">{v.type}</span><span className="chip chip-green">{v.days}</span></div>
               <h3>{v.country}</h3>
-              <div className="muted" style={{ fontSize: 15 }}>Documents: {v.docs.join(", ")}</div>
+              <div className="small muted">Documents: {v.docs.join(", ")}</div>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "end", marginTop: "auto", gap: 10, flexWrap: "wrap" }}>
-                <div><div className="faint" style={{ fontSize: 13 }}>Embassy fee {pkr(v.fee)}{v.service ? ` + service ${pkr(v.service)}` : ", no service fee with a package"}</div><div className="price" style={{ fontSize: 22 }}>{pkr(v.fee + v.service)}</div></div>
-                <a className="btn btn-wa btn-sm" href={waLink(`Assalam o Alaikum, I need visa support for ${v.country}. Travel dates: __`)}>Start</a>
+                <div><div className="tiny muted">Embassy {v.fee.toLocaleString("en-PK")}{v.service ? ` + service ${v.service.toLocaleString("en-PK")}` : ", no service fee with a package"}</div><div className="price" style={{ fontSize: 22 }}><small>PKR</small> {(v.fee + v.service).toLocaleString("en-PK")}</div></div>
+                <a className="btn btn-gold btn-sm" href={`/reserve?item=VISA-${encodeURIComponent(v.country)}&price=${v.fee + v.service}`}>Start application</a>
               </div>
             </div>
           ))}
         </div>
+        {!list.length && <div className="card card-body" style={{ textAlign: "center", padding: 28 }}><h3>We have not listed {sp.country} yet</h3><p className="muted">Start an application and we send the checklist for that country within the day.</p><a className="btn btn-gold" style={{ justifySelf: "center" }} href={`/reserve?item=VISA-${encodeURIComponent(sp.country ?? "")}&price=0`}>Start application</a></div>}
       </section>
     </>
   );

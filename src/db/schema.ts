@@ -96,3 +96,36 @@ export const leads = pgTable("leads", {
   assignedTo: text("assigned_to"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
+
+export const bookingStatus = pgEnum("booking_status", ["reserved", "deposit_pending", "deposit_received", "confirmed", "cancelled"]);
+export const payMethod = pgEnum("pay_method", ["bank", "jazzcash", "easypaisa", "card", "cash"]);
+
+export const bookings = pgTable("bookings", {
+  id: serial("id").primaryKey(),
+  ref: text("ref").notNull().unique(),
+  product: text("product").notNull(), // U H T V A F HT
+  itemCode: text("item_code").notNull(),
+  title: text("title").notNull(),
+  packageId: integer("package_id").references(() => packages.id, { onDelete: "set null" }),
+  room: text("room"),
+  adults: integer("adults").notNull().default(1),
+  children: integer("children").notNull().default(0),
+  infants: integer("infants").notNull().default(0),
+  travellers: jsonb("travellers").$type<{ name: string; type: string }[]>().notNull().default([]),
+  leadName: text("lead_name").notNull(),
+  phone: text("phone").notNull(),
+  email: text("email"),
+  city: text("city"),
+  travelDate: text("travel_date"),
+  details: jsonb("details").$type<Record<string, string>>().notNull().default({}),
+  total: integer("total").notNull().default(0),
+  deposit: integer("deposit").notNull().default(0),
+  paid: integer("paid").notNull().default(0),
+  payMethod: payMethod("pay_method"),
+  payRef: text("pay_ref"),
+  status: bookingStatus("status").notNull().default("reserved"),
+  notes: text("notes"),
+  pagePath: text("page_path"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+}, (t) => [index("bookings_phone").on(t.phone), index("bookings_created").on(t.createdAt)]);

@@ -1,0 +1,4 @@
+const H: [string, string][] = [["dubai", "dubai"], ["istanbul", "istanbul"], ["turkey", "turkey"], ["baku", "baku"], ["kuala", "kl"], ["bangkok", "bangkok"], ["maldives", "maldives"], ["sri", "srilanka"], ["egypt", "egypt"], ["georgia", "georgia"], ["london", "london"]];
+export const holidayImg = (slug: string, w: 800 | 1600 = 800) => { const k = H.find(([p]) => slug.startsWith(p))?.[1] ?? "dubai"; return w === 800 ? `/img/${k}-800.webp` : `/img/${k}.webp`; };
+export const tourImg = (slug: string, w: 800 | 1600 = 800) => { const k = ["hunza", "neelum", "skardu", "lahore", "swat", "naran", "murree"].find((p) => slug.startsWith(p)) ?? "hunza"; return w === 800 ? `/img/${k}-800.webp` : `/img/${k}.webp`; };
+export const cityImg = (city: string) => { const c = city.toLowerCase(); const k = ["makkah", "madinah", "dubai", "istanbul", "baku", "skardu", "lahore", "murree", "hunza"].find((p) => c.includes(p)) ?? "dubai"; return `/img/${k}-800.webp`; };
