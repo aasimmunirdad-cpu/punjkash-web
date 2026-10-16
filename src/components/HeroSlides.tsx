@@ -15,7 +15,7 @@ export default function HeroSlides({ slides, interval = 5500 }: { slides: Slide[
   return (
     <div className="slides" onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)}>
       {slides.map((s, k) => (
-        <img key={s.img} src={s.img} alt={s.alt} className={k === i ? "on" : ""} fetchPriority={k === 0 ? "high" : "low"} loading={k === 0 ? "eager" : "lazy"} decoding="async" />
+        <img key={s.img} src={s.img.replace(".webp","-800.webp")} srcSet={`${s.img.replace(".webp","-800.webp")} 800w, ${s.img.replace(".webp","-1600.webp")} 1600w`} sizes="100vw" alt={s.alt} className={k === i ? "on" : ""} fetchPriority={k === 0 ? "high" : "low"} loading={k === 0 ? "eager" : "lazy"} decoding="async" />
       ))}
       <a className="slide-tag" href={slides[i].href} key={slides[i].place}><b>{slides[i].place}</b><span>{slides[i].line}</span></a>
       <div className="slide-dots" role="tablist" aria-label="Destinations">{slides.map((s, k) => <button key={s.img} type="button" role="tab" aria-selected={k === i} aria-label={s.place} onClick={() => setI(k)} />)}</div>
