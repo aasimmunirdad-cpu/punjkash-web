@@ -1,5 +1,6 @@
 import Link from "next/link";
 import SearchCard from "@/components/SearchCard";
+import HeroSlides, { type Slide } from "@/components/HeroSlides";
 import PackageRow from "@/components/PackageRow";
 import { I } from "@/components/Icons";
 import { listPackages } from "@/lib/packages";
@@ -7,6 +8,17 @@ import { destinations, flightRoutes, holidays, tours, SAMPLE } from "@/lib/catal
 import { pkr, site, waLink } from "@/lib/site";
 
 export const dynamic = "force-dynamic";
+
+const SLIDES: Slide[] = [
+  { img: "/img/makkah.webp", alt: "Masjid al-Haram, Makkah", place: "Makkah", line: "Umrah from PKR 260,500", href: "/umrah" },
+  { img: "/img/maldives.webp", alt: "Maldives lagoon", place: "Maldives", line: "Honeymoon, 4 nights from 385,000", href: "/holidays/maldives-4-nights" },
+  { img: "/img/hunza.webp", alt: "Hunza valley", place: "Hunza", line: "7 days in the north from 98,000", href: "/tours/hunza-7-days" },
+  { img: "/img/dubai.webp", alt: "Dubai skyline", place: "Dubai", line: "Flights from 72,900 return", href: "/flights?from=LHE&to=Dubai" },
+  { img: "/img/istanbul.webp", alt: "Istanbul at sunset", place: "Istanbul", line: "5 nights from 245,000", href: "/holidays/istanbul-5-nights" },
+  { img: "/img/madinah.webp", alt: "Al-Masjid an-Nabawi, Madinah", place: "Madinah", line: "Ramadan 2027 is open", href: "/umrah?month=2027-03" },
+  { img: "/img/skardu.webp", alt: "Skardu", place: "Skardu", line: "6 days from 112,000", href: "/tours/skardu-6-days" },
+  { img: "/img/baku.webp", alt: "Baku at night", place: "Baku", line: "5 nights from 215,000", href: "/holidays/baku-5-nights" },
+];
 
 const IMG: Record<string, string> = { dubai: "dubai", istanbul: "istanbul", baku: "baku", kl: "kl", bangkok: "bangkok", maldives: "maldives", srilanka: "srilanka", egypt: "egypt", georgia: "georgia", london: "london", turkey: "turkey" };
 const holidayImg = (slug: string) => { const k = Object.keys(IMG).find((k) => slug.startsWith(k) || (k === "kl" && slug.startsWith("kuala")) || (k === "srilanka" && slug.startsWith("sri")) || (k === "turkey" && slug.startsWith("turkey"))); return `/img/${k ?? "dubai"}-800.webp`; };
@@ -18,10 +30,10 @@ export default async function Home() {
   return (
     <>
       <section className="hero">
-        <img className="bg" src="/img/makkah.webp" srcSet="/img/makkah-800.webp 800w, /img/makkah.webp 1600w" sizes="100vw" alt="Masjid al-Haram, Makkah" fetchPriority="high" />
+        <HeroSlides slides={SLIDES} />
         <div className="wrap">
           <h1>Every journey, one honest price.</h1>
-          <p>Umrah with the hotel named and the distance measured. Flights, holidays, tours of Pakistan, hotels and visas, all from Lahore, reserved online in three steps.</p>
+          <p>Flights, Umrah, holidays, honeymoons, tours, hotels and visas. Every trip from Lahore, priced in full and reserved online in three steps.</p>
         </div>
       </section>
 
