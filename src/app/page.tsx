@@ -1,5 +1,6 @@
 import Link from "next/link";
 import SearchCard from "@/components/SearchCard";
+import Rail from "@/components/Rail";
 import HeroSlides, { type Slide } from "@/components/HeroSlides";
 import PackageRow from "@/components/PackageRow";
 import { I } from "@/components/Icons";
@@ -49,11 +50,11 @@ export default async function Home() {
 
       <section className="section wrap">
         <div className="section-head"><div><h2>Where next?</h2><p>Pick a place, see what it costs.</p></div><Link className="more" href="/holidays">All destinations</Link></div>
-        <div className="rail">
+        <Rail label="Destinations">
           {destinations.map((d) => (
             <Link key={d.name} href={d.href} className="tile"><img src={`/img/${d.img}-800.webp`} alt={d.name} loading="lazy" width={800} height={600} /><div><b>{d.name}</b><span>{d.tag}</span></div></Link>
           ))}
-        </div>
+        </Rail>
       </section>
 
       <section className="section wrap">
@@ -83,22 +84,22 @@ export default async function Home() {
 
       <section className="section wrap">
         <div className="section-head"><div><h2>Holidays abroad</h2><p>Flights, hotel, transfers and visa in one price.</p></div><Link className="more" href="/holidays">All holidays</Link></div>
-        <div className="rail">
+        <Rail label="Holidays abroad">
           {holidays.slice(0, 8).map((h) => (
             <Link key={h.slug} href={`/holidays/${h.slug}`} className="card"><div className="card-photo"><img src={holidayImg(h.slug)} alt={h.city} loading="lazy" width={800} height={600} /></div>
               <div className="card-body"><span className="chip" style={{ alignSelf: "flex-start" }}>{h.nights} nights · {h.stars}</span><h3>{h.title}</h3><span className="small muted">{h.highlight}</span><div className="price" style={{ fontSize: 20, marginTop: "auto" }}><small>from PKR</small> {h.from.toLocaleString("en-PK")}</div></div></Link>
           ))}
-        </div>
+        </Rail>
       </section>
 
       <section className="section wrap">
         <div className="section-head"><div><h2>Pakistan, properly</h2><p>Punjab, Kashmir and the north. Private cars or small groups.</p></div><Link className="more" href="/tours">All tours</Link></div>
-        <div className="rail">
+        <Rail label="Tours of Pakistan">
           {tours.map((t) => (
             <Link key={t.slug} href={`/tours/${t.slug}`} className="card"><div className="card-photo"><img src={tourImg(t.slug)} alt={t.title} loading="lazy" width={800} height={600} /></div>
               <div className="card-body"><span className="chip" style={{ alignSelf: "flex-start" }}>{t.days} days · {t.type}</span><h3>{t.title}</h3><span className="small muted">{t.region} · {t.season}</span><div className="price" style={{ fontSize: 20, marginTop: "auto" }}><small>from PKR</small> {t.from.toLocaleString("en-PK")}</div></div></Link>
           ))}
-        </div>
+        </Rail>
       </section>
 
       <section className="section wrap">

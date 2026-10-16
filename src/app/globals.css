@@ -217,3 +217,13 @@ footer.site a:hover{color:#fff}
 @media(prefers-reduced-motion:reduce){.slides img{transition:none;transform:none}}
 .brand-logo{height:54px;width:auto;display:block}
 @media(min-width:900px){:root{--nav-h:84px}.brand-logo{height:66px}}
+.rail-wrap{position:relative}
+.rail{cursor:grab;scrollbar-width:thin;scrollbar-color:var(--line-2) transparent}
+.rail:active{cursor:grabbing}
+.rail::-webkit-scrollbar{display:block;height:6px}.rail::-webkit-scrollbar-thumb{background:var(--line-2);border-radius:3px}
+@media(max-width:899px){.rail{scrollbar-width:none}.rail::-webkit-scrollbar{display:none}}
+.rail-btn{position:absolute;top:calc(50% - 30px);width:44px;height:44px;border-radius:50%;border:1px solid var(--line-2);background:#fff;box-shadow:var(--shadow-float);font-size:26px;line-height:1;color:var(--navy);display:none;align-items:center;justify-content:center;cursor:pointer;z-index:3;padding:0 0 3px}
+.rail-btn:hover{background:var(--navy);color:#fff}
+.rail-btn.l{left:-14px}.rail-btn.r{right:-14px}
+@media(min-width:900px){.rail-btn{display:inline-flex}}
+.rail{user-select:none}.rail img{-webkit-user-drag:none;user-drag:none}
