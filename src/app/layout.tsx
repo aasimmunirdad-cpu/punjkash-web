@@ -39,7 +39,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           {site.nav.map((n) => <a key={n.href} className="item" href={n.href}>{n.label}<span className="faint">›</span></a>)}
           <a className="item" href="/bookings">My bookings<span className="faint">›</span></a>
           <a className="item" href="/about">About PunjKash<span className="faint">›</span></a>
-          <img src="/urdu-gold.png" alt="پنج کاش" style={{ height: 30, width: "auto", margin: "14px 0 0" }} />
           <div style={{ display: "flex", flexDirection: "column", gap: 10, paddingTop: 18 }}>
             {site.partners.map((p) => <a key={p.wa} className="btn btn-line" href={`tel:+${p.wa}`}><I.phone /> {p.name} · {p.phone}</a>)}
           </div>
@@ -47,7 +46,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <main>{children}</main>
         <footer className="site">
           <div className="wrap cols">
-            <div><img src="/logo-white.png" alt="PunjKash" style={{ height: 40, width: "auto", alignSelf: "flex-start" }} /><img src="/urdu-gold.png" alt="پنج کاش" style={{ height: 34, width: "auto", alignSelf: "flex-start", margin: "4px 0 2px" }} /><span>{site.legalName}<br />{site.address}<br />NTN {site.ntn}</span></div>
+            <div><img src="/logo-white.png" alt="PunjKash" style={{ height: 40, width: "auto", alignSelf: "flex-start" }} /><span>{site.legalName}<br />{site.address}<br />NTN {site.ntn}</span></div>
             <div><strong>Travel</strong>{site.nav.map((n) => <Link key={n.href} href={n.href}>{n.label}</Link>)}</div>
             <div><strong>Talk to us</strong>{site.partners.map((p) => <a key={p.wa} href={`tel:+${p.wa}`}>{p.name} · {p.phone}</a>)}<a href={`mailto:${site.email}`}>{site.email}</a></div>
             <div><strong>Company</strong><Link href="/about">About</Link><Link href="/how-to-book">How to book and pay</Link><Link href="/policies">Policies</Link><Link href="/contact">Contact</Link><Link href="/credits">Photo credits</Link></div>

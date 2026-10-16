@@ -109,6 +109,10 @@ export default async function Home() {
         </div>
       </section>
 
+      <section className="wrap" style={{ textAlign: "center", padding: "20px 16px 8px" }}>
+        <img src="/urdu-gold.png" alt="پنج کاش" style={{ height: "clamp(64px,12vw,110px)", width: "auto", display: "inline-block" }} />
+      </section>
+
       <section className="section wrap" style={{ paddingBottom: 48 }}>
         <div className="steps">
           <div><b>Choose</b><span>Search, compare hotels and prices, pick a room type.</span></div>
