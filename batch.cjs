@@ -185,7 +185,7 @@ var slug = (s) => s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g
 var SH = "Shuttle";
 var meezab = { sup: "M", airline: "Saudia", infant: 68e3, child: 198e3, childBed: "Adult price less 20,000", transport: "Transport" };
 var mz = (code, ref, out, back, depart, ret, days, nm, nd, hm, hd, t, note) => ({ ...meezab, code, ref, out, back, depart, ret, days, nm, nd, hm, hd, tiers: { sharing: t[0], quad: t[1], triple: t[2], double: t[3] }, note: `Meezab flyer revised 16 Oct 2026, ${ref}. Face value.${note ? " " + note : ""}` });
-var rh = (code, ref, out, back, airline, depart, ret, days, hm, hd, t, nm, nd, note) => ({ code, sup: "R", ref, out, back, airline, depart, ret, days, nm, nd, hm, hd, tiers: { sharing: t[0], quad: t[1], triple: t[2], double: t[3] }, transport: "Transport", note: `Unnamed flyer filed under Rahimia Group (assumed, confirm). Face value.${note ? " " + note : ""}` });
+var rh = (code, ref, out, back, airline, depart, ret, days, hm, hd, t, nm, nd, note) => ({ code, sup: "R", ref, out, back, airline, depart, ret, days, nm, nd, hm, hd, tiers: { sharing: t[0], quad: t[1], triple: t[2], double: t[3] }, transport: "Transport", note: `Rahimia Group flyer (supplier confirmed 17 Oct 2026). Face value.${note ? " " + note : ""}` });
 var Z = { name: "Arafat Zahbi / Fakhir Al Azizia", label: SH };
 var HT = { name: "Hala Taibah", label: SH };
 var TF = { name: "Taj Fiddi Hotel", m: 750 };

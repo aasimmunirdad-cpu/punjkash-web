@@ -16,7 +16,7 @@ const meezab = { sup: "M", airline: "Saudia", infant: 68000, child: 198000, chil
 const mz = (code: string, ref: string, out: string, back: string, depart: string, ret: string, days: number, nm: number, nd: number, hm: H, hd: H, t: number[], note?: string): P =>
   ({ ...meezab, code, ref, out, back, depart, ret, days, nm, nd, hm, hd, tiers: { sharing: t[0], quad: t[1], triple: t[2], double: t[3] }, note: `Meezab flyer revised 16 Oct 2026, ${ref}. Face value.${note ? " " + note : ""}` });
 const rh = (code: string, ref: string, out: string, back: string, airline: string, depart: string, ret: string, days: number, hm: H, hd: H, t: number[], nm?: number, nd?: number, note?: string): P =>
-  ({ code, sup: "R", ref, out, back, airline, depart, ret, days, nm, nd, hm, hd, tiers: { sharing: t[0], quad: t[1], triple: t[2], double: t[3] }, transport: "Transport", note: `Unnamed flyer filed under Rahimia Group (assumed, confirm). Face value.${note ? " " + note : ""}` });
+  ({ code, sup: "R", ref, out, back, airline, depart, ret, days, nm, nd, hm, hd, tiers: { sharing: t[0], quad: t[1], triple: t[2], double: t[3] }, transport: "Transport", note: `Rahimia Group flyer (supplier confirmed 17 Oct 2026). Face value.${note ? " " + note : ""}` });
 
 const Z: H = { name: "Arafat Zahbi / Fakhir Al Azizia", label: SH }, HT: H = { name: "Hala Taibah", label: SH };
 const TF: H = { name: "Taj Fiddi Hotel", m: 750 }, DS: H = { name: "Diyar Al Safa", m: 700 };
