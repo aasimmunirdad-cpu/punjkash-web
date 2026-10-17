@@ -13,3 +13,8 @@ if (n === 0 && process.env.SEED_ON_EMPTY !== "false") {
   const { execSync } = await import("node:child_process");
   execSync("node seed.cjs", { stdio: "inherit" });
 }
+
+if (process.env.RUN_BATCH !== "false") {
+  const { execSync } = await import("node:child_process");
+  try { execSync("node batch.cjs", { stdio: "inherit" }); } catch (e) { console.log("batch import failed, continuing"); }
+}

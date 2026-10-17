@@ -12,8 +12,9 @@ COPY --from=build /app/.next/standalone ./
 COPY --from=build /app/.next/static ./.next/static
 COPY --from=build /app/public ./public
 COPY --from=build /app/drizzle ./drizzle
+COPY --from=build /app/batch.cjs /app/seed.cjs ./
 COPY --from=build /app/node_modules/drizzle-orm ./node_modules/drizzle-orm
 COPY --from=build /app/node_modules/postgres ./node_modules/postgres
-COPY migrate.mjs seed.cjs ./
+COPY migrate.mjs ./
 EXPOSE 3000
 CMD ["sh", "-c", "node migrate.mjs && node server.js"]

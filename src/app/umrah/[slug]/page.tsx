@@ -51,7 +51,7 @@ export default async function PackagePage({ params }: { params: Promise<{ slug: 
       <div className="product">
         <div style={{ display: "grid", gap: 20 }}>
           <div style={{ display: "grid", gap: 10 }}>
-            <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}><span className="chip">{p.days} days</span><span className="chip">{p.nightsMakkah ?? 0}N Makkah · {p.nightsMadinah ?? 0}N Madinah</span>{p.seats != null && p.seats <= 10 && <span className="chip chip-hot">Only {p.seats} seats left</span>}{p.discountBadge && <span className="chip chip-gold">Discount on call</span>}{closed && <span className="chip chip-hot">Departed or sold out</span>}</div>
+            <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}><span className="chip">{p.days} days</span>{p.nightsMakkah != null && p.nightsMadinah != null && <span className="chip">{p.nightsMakkah}N Makkah · {p.nightsMadinah}N Madinah</span>}{p.seats != null && p.seats <= 10 && <span className="chip chip-hot">Only {p.seats} seats left</span>}{p.discountBadge && <span className="chip chip-gold">Discount on call</span>}{closed && <span className="chip chip-hot">Departed or sold out</span>}</div>
             <h1 style={{ fontSize: "clamp(26px,3.6vw,40px)" }}>{p.days} Days Umrah from {p.departureCity}{p.airline ? ` with ${p.airline}` : ""}</h1>
             <p className="muted">Departs {fmtDate(p.departDate)}{p.returnDate ? `, returns ${fmtDate(p.returnDate)}` : ""}. Reference {p.code}.</p>
           </div>
@@ -68,8 +68,8 @@ export default async function PackagePage({ params }: { params: Promise<{ slug: 
           </div></div>
 
           <div className="grid g2">
-            <div className="card card-body"><div className="tiny muted">Makkah hotel · {p.nightsMakkah ?? 0} nights</div><h3>{pk.mName}</h3><span className="muted small">{dist(pk.mDist, pk.mLabel)}</span></div>
-            <div className="card card-body"><div className="tiny muted">Madinah hotel · {p.nightsMadinah ?? 0} nights</div><h3>{pk.dName}</h3><span className="muted small">{dist(pk.dDist, pk.dLabel)}</span></div>
+            <div className="card card-body"><div className="tiny muted">Makkah hotel{p.nightsMakkah != null ? ` · ${p.nightsMakkah} nights` : ""}</div><h3>{pk.mName}</h3><span className="muted small">{dist(pk.mDist, pk.mLabel)}</span></div>
+            <div className="card card-body"><div className="tiny muted">Madinah hotel{p.nightsMadinah != null ? ` · ${p.nightsMadinah} nights` : ""}</div><h3>{pk.dName}</h3><span className="muted small">{dist(pk.dDist, pk.dLabel)}</span></div>
           </div>
 
           <div className="card card-body">

@@ -14,7 +14,7 @@ export default function PackageRow({ p, photo = "/img/makkah-800.webp" }: { p: P
       <div className="body">
         <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
           <span className="chip">{p.days} days</span>
-          <span className="chip">{p.nightsMakkah ?? 0}N Makkah · {p.nightsMadinah ?? 0}N Madinah</span>
+          {p.nightsMakkah != null && p.nightsMadinah != null && <span className="chip">{p.nightsMakkah}N Makkah · {p.nightsMadinah}N Madinah</span>}
           {seats && <span className="chip chip-hot">{seats}</span>}
           {p.discountBadge && <span className="chip chip-gold">Discount on call</span>}
         </div>
